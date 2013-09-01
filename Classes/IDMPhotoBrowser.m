@@ -754,8 +754,8 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 
 - (NSUInteger)numberOfPhotos
 {
-    if ([self.delegate respondsToSelector:@selector(numberOfPhotosForPhotoBrowser:)]) {
-        return [self.delegate numberOfPhotosForPhotoBrowser:self];
+    if ([self.delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
+        return [self.delegate numberOfPhotosInPhotoBrowser:self];
     } else {
         return _newPhotos.count;
     }
