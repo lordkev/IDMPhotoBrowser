@@ -19,9 +19,13 @@
 // Progress download block, used to update the circularView
 typedef void (^IDMProgressUpdateBlock)(CGFloat progress);
 
+// Action block
+typedef void (^IDMActionBlock)();
+
 // Properties
 @property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) NSURL *photoURL;
+@property (nonatomic, strong) IDMActionBlock actionBlock;
 @property (nonatomic, strong) IDMProgressUpdateBlock progressUpdateBlock;
 
 // Class

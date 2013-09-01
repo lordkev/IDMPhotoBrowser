@@ -1196,11 +1196,18 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 }
 
 - (void)actionButtonPressed:(id)sender {
+    
+    IDMPhoto *photo = [self photoAtIndex:_currentPageIndex];
+    
+    if (photo.actionBlock) {
+        photo.actionBlock();
+        return;
+    }
+    
     if (_actionsSheet) {
         // Dismiss
         [_actionsSheet dismissWithClickedButtonIndex:_actionsSheet.cancelButtonIndex animated:YES];
     } else {
-        id <IDMPhoto> photo = [self photoAtIndex:_currentPageIndex];
         if ([self numberOfPhotos] > 0 && [photo underlyingImage]) {
             
             // Keep controls hidden
