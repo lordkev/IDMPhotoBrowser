@@ -159,6 +159,7 @@
         _displayActionButton = YES;
         _displayArrowButton = YES;
         _displayCounterLabel = NO;
+        _proactivelyLoadImages = YES;
         _useWhiteBackgroundColor = NO;
         
         _leftArrowPath = _rightArrowPath = _leftArrowSelectedPath = _rightArrowSelectedPath = @"";
@@ -799,6 +800,11 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 }
 
 - (void)loadAdjacentPhotosIfNecessary:(id<IDMPhoto>)photo {
+    
+    if (!_proactivelyLoadImages) {
+        return;
+    }
+    
     IDMZoomingScrollView *page = [self pageDisplayingPhoto:photo];
     if (page) {
         // If page is current page then initiate loading of previous and next pages

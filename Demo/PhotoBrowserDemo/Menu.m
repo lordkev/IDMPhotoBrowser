@@ -8,6 +8,11 @@
 
 #import "Menu.h"
 
+@interface Menu ()
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@end
+
 @implementation Menu
 
 #pragma mark - Initialization
@@ -62,7 +67,7 @@
     UIButton *buttonSender = (UIButton*)sender;
     
     // Create an array to store IDMPhoto objects
-    NSMutableArray *photos = [[NSMutableArray alloc] init];
+    self.photos = [[NSMutableArray alloc] init];
     
     IDMPhoto *photo;
     
@@ -70,28 +75,28 @@
     {
         photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo1l" ofType:@"jpg"]];
         photo.caption = @"Grotto of the Madonna";
-        [photos addObject:photo];
+        [self.photos addObject:photo];
     }
     
     photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo3l" ofType:@"jpg"]];
     photo.caption = @"York Floods";
-    [photos addObject:photo];
+    [self.photos addObject:photo];
     photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo2l" ofType:@"jpg"]];
     photo.caption = @"The London Eye is a giant Ferris wheel situated on the banks of the River Thames, in London, England.";
-    [photos addObject:photo];
+    [self.photos addObject:photo];
     photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo4l" ofType:@"jpg"]];
     photo.caption = @"Campervan";
-    [photos addObject:photo];
+    [self.photos addObject:photo];
     
     if(buttonSender.tag == 102)
     {
         photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo1l" ofType:@"jpg"]];
         photo.caption = @"Grotto of the Madonna";
-        [photos addObject:photo];
+        [self.photos addObject:photo];
     }
     
     // Create and setup browser
-    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos animatedFromView:sender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] init]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
     browser.delegate = self;
     browser.displayActionButton = NO;
     browser.displayArrowButton = YES;
@@ -163,7 +168,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Create an array to store IDMPhoto objects
-	NSMutableArray *photos = [[NSMutableArray alloc] init];
+	self.photos = [[NSMutableArray alloc] init];
 
     IDMPhoto *photo;
     
@@ -171,7 +176,7 @@
     {
         photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo2l" ofType:@"jpg"]];
         photo.caption = @"The London Eye is a giant Ferris wheel situated on the banks of the River Thames, in London, England.";
-        [photos addObject:photo];
+        [self.photos addObject:photo];
 	}
     else if(indexPath.section == 1)
     {
@@ -179,26 +184,29 @@
         {
             photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo1l" ofType:@"jpg"]];
             photo.caption = @"Grotto of the Madonna";
-			[photos addObject:photo];
+            photo.actionBlock= ^() {
+                    [[[UIAlertView alloc] initWithTitle:@"Action Block" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            };
+			[self.photos addObject:photo];
             photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo2l" ofType:@"jpg"]];
             photo.caption = @"The London Eye is a giant Ferris wheel situated on the banks of the River Thames, in London, England.";
-			[photos addObject:photo];
+			[self.photos addObject:photo];
             photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo3l" ofType:@"jpg"]];
             photo.caption = @"York Floods";
-			[photos addObject:photo];
+			[self.photos addObject:photo];
             photo = [IDMPhoto photoWithFilePath:[[NSBundle mainBundle] pathForResource:@"photo4l" ofType:@"jpg"]];
             photo.caption = @"Campervan";
-			[photos addObject:photo];
+			[self.photos addObject:photo];
         }
         else if(indexPath.row == 1 || indexPath.row == 2)
         {
             NSArray *photosWithURL = [IDMPhoto photosWithURLs:[NSArray arrayWithObjects:[NSURL URLWithString:@"http://farm4.static.flickr.com/3567/3523321514_371d9ac42f_b.jpg"], @"http://farm4.static.flickr.com/3629/3339128908_7aecabc34b_b.jpg", [NSURL URLWithString:@"http://farm4.static.flickr.com/3364/3338617424_7ff836d55f_b.jpg"], @"http://farm4.static.flickr.com/3590/3329114220_5fbc5bc92b_b.jpg", nil]];
-            photos = [NSMutableArray arrayWithArray:photosWithURL];
+            self.photos = [NSMutableArray arrayWithArray:photosWithURL];
         }
     }
     
     // Create and setup browser
-    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] init];
     browser.delegate = self;
     
     if(indexPath.section == 1 && indexPath.row == 1) // 'Photos from Flickr' using custom action
@@ -225,6 +233,14 @@
 }
 
 #pragma mark - IDMPhotoBrowser Delegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(IDMPhotoBrowser *)photoBrowser {
+    return [self.photos count];
+}
+
+- (id<IDMPhoto>)photoBrowser:(IDMPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    return [self.photos objectAtIndex:index];
+}
 
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index
 {

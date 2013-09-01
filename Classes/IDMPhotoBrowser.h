@@ -44,6 +44,7 @@
 @property (nonatomic, retain) NSArray *actionButtonTitles;
 
 // Customization
+@property (nonatomic) BOOL proactivelyLoadImages;
 @property (nonatomic) BOOL useWhiteBackgroundColor;
 @property (nonatomic, weak) NSString *leftArrowPath, *leftArrowSelectedPath;
 @property (nonatomic, weak) NSString *rightArrowPath, *rightArrowSelectedPath;
