@@ -754,12 +754,20 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 
 - (NSUInteger)numberOfPhotos
 {
-    return _newPhotos.count;
+    if ([self.delegate respondsToSelector:@selector(numberOfPhotosForPhotoBrowser:)]) {
+        return [self.delegate numberOfPhotosForPhotoBrowser:self];
+    } else {
+        return _newPhotos.count;
+    }
 }
 
 - (id<IDMPhoto>)photoAtIndex:(NSUInteger)index
 {
-    return _newPhotos[index];
+    if ([self.delegate respondsToSelector:@selector(photoBrowser:photoAtIndex:)]) {
+        return [self.delegate photoBrowser:self photoAtIndex:index];
+    } else {
+        return _newPhotos[index];
+    }
 }
 
 - (IDMCaptionView *)captionViewForPhotoAtIndex:(NSUInteger)index {
