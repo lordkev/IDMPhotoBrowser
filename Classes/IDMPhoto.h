@@ -20,7 +20,7 @@
 typedef void (^IDMProgressUpdateBlock)(CGFloat progress);
 
 // Action block
-typedef void (^IDMActionBlock)();
+typedef void (^IDMActionBlock)(UIView *presentingView);
 
 // Properties
 @property (nonatomic, strong) NSString *caption;

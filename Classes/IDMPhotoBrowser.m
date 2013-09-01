@@ -1206,7 +1206,7 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
     IDMPhoto *photo = [self photoAtIndex:_currentPageIndex];
     
     if (photo.actionBlock) {
-        photo.actionBlock();
+        photo.actionBlock(sender);
         return;
     }
     
